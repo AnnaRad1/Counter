@@ -13,6 +13,7 @@ public class Counter : MonoBehaviour
     private Coroutine _coroutine;
     private float _currentNumber;
     private bool _isCounting = false;
+    private WaitForSecondsRealtime _wait;
 
     public float StartNumber => _startNumber;
 
@@ -21,6 +22,7 @@ public class Counter : MonoBehaviour
     private void Awake()
     {
         _currentNumber = _startNumber;
+        _wait = new WaitForSecondsRealtime(_delay);
     }
 
     private void OnEnable()
@@ -40,16 +42,16 @@ public class Counter : MonoBehaviour
         if (_coroutine != null)
             StopCoroutine(_coroutine);
 
-        _coroutine = StartCoroutine(DecreaseNumbers());
+        _coroutine = StartCoroutine(IncreaseNumbers());
     }
 
-    public IEnumerator DecreaseNumbers()
+    public IEnumerator IncreaseNumbers()
     {
         while (_isCounting && _currentNumber != _maxNumber)
         {
             _currentNumber++;
             Changed?.Invoke(_currentNumber);
-            yield return new WaitForSecondsRealtime(_delay);
+            yield return _wait;
         }
     }
 }
